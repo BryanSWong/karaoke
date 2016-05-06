@@ -5,9 +5,9 @@ song = Song("Safe and Sound", "Capital Cites", "www.youtube.com/watch?v=47dtFZ8C
 song2 = Song("In The End", "Linkin Park", "www.youtube.com/watch?v=eVTXPUF4Oz4")
 song3 = Song("Beautiful Now", "Zedd", "www.youtube.com/watch?v=n1a7o44WxNo")
 
-print(song.gettitle())
-print(song.getartist())
-print(song.getlink())
+print(song.get_title())
+print(song.get_artist())
+print(song.get_link())
 
 listen = Player(song)
 
