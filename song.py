@@ -9,11 +9,11 @@ class Song:
         self.song["artist"] = self.artist
         self.song["youtube"] = self.youtube
 
-    def getTitle(self):
+    def gettitle(self):
         return self.title
 
-    def getArtist(self):
+    def getartist(self):
         return self.artist
 
-    def getLink(self):
+    def getlink(self):
         return self.youtube
