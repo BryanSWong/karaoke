@@ -17,8 +17,8 @@ listen.add(song)
 listen.add(song2)
 listen.add(song3)
 
-listen.queueplay()
+listen.queue_play()
 
 listen.remove(song2)
 
-listen.queueplay()
+listen.queue_play()
