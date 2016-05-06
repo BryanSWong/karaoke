@@ -17,4 +17,5 @@ class Player:
 
     def queue_play(self):
         for song in self.queue:
+            self.song = song
             self.play()
