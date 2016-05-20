@@ -1,8 +1,9 @@
 from sys import exit
+from player import Player
+from songDB import songDB
 
 
-class Interface(object):
-
+class Interface:
     def __init__(self, the_menu):
         self.the_menu = the_menu
 
@@ -16,7 +17,6 @@ class Interface(object):
 
 
 class Main:
-
     @property
     def display(self):
         print("Welcome to the main menu please select a option:")
@@ -27,8 +27,7 @@ class Main:
         action = raw_input("> ")
 
         if action == '1':
-            print("programing needed")
-            return 'main'
+            return 'play'
 
         elif action == '2':
             print("programing needed")
@@ -40,34 +39,105 @@ class Main:
 
         else:
             print("That is not a valid option.")
+            print("")
             return 'main'
 
 
 class Off:
-
     def display(self):
         exit(1)
 
 
 class Play:
-
+    @property
     def display(self):
-        pass
+        count = 1
+        print("Which song do you want to play:")
+        for song in songDB:
+            print("%d.Title: %s, Artist: %s: Link:%s") % (count, song.get_title(), song.get_artist(), song.get_link())
+            count += 1
+        print("type main to go back to main menu")
+
+        action = raw_input("> ")
+
+        if action == '1':
+            play_it = Player(songDB[0])
+            play_it.play()
+            print("")
+
+            return 'again'
+
+        elif action == '2':
+            play_it = Player(songDB[1])
+            play_it.play()
+            print("")
+
+            return 'again'
+
+        elif action == '3':
+            play_it = Player(songDB[2])
+            play_it.play()
+            print("")
+
+            return 'again'
+
+        elif action == '4':
+            play_it = Player(songDB[3])
+            play_it.play()
+            print("")
+
+            return 'again'
+
+        elif action == '5':
+            play_it = Player(songDB[4])
+            play_it.play()
+            print("")
+
+            return 'again'
+
+        elif action == "main":
+            return 'main'
+
+        else:
+            print("that is not a valid choice.")
+            print("")
+            return 'play'
 
 
 class Queue:
-
     def display(self):
         pass
 
 
-class Power(object):
+class Again:
+    @property
+    def display(self):
+        print("Play another song? (Y/N)")
+        print("note selecting no will power off the system.")
 
+        action = raw_input("> ")
+        action.lower()
+
+        if action == 'y':
+            return 'play'
+
+        elif action == 'n':
+            print("Powering off, have a nice day.")
+            return 'off'
+
+        else:
+            print("that is not a valid choice")
+            print("")
+            return 'again'
+
+
+class Power:
     menu = {
         'main': Main(),
         'off': Off(),
         'play': Play(),
         'queue': Queue(),
+        'again': Again(),
     }
 
     def __init__(self, start_menu):
