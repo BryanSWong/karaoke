@@ -5,7 +5,8 @@ class Player:
         self.queue = set()
 
     def play(self):
-        print("Now playing: '%s' by %s, official video at %s" % (self.song.get_title(), self.song.get_artist(), self.song.get_link()))
+        print("Now playing: '%s' by %s, official video at %s" %
+              (self.song.get_title(), self.song.get_artist(), self.song.get_link()))
 
     def add(self, song):
         self.queue.add(song)

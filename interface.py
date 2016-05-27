@@ -2,6 +2,7 @@ from sys import exit
 from player import Player
 from songDB import songDB, song
 starter = Player(song)  # a var that sets up the player class for later use.
+queue_builder = []
 
 
 def options(songlist):
@@ -11,11 +12,27 @@ def options(songlist):
         count += 1
 
 
-def queuelist(thequeue):
+def queue_list(thequeue):
     count = 1
     for item in thequeue:
         print("%d.Title: %s, Artist: %s: Link:%s") % (count, item.get_title(), item.get_artist(), item.get_link())
         count += 1
+
+
+def removal_list(queue):
+    count = 1
+
+    for song in queue:
+        queue_builder.append(song)
+
+    for item in queue_builder:
+        print("%d.Title: %s, Artist: %s: Link:%s") % (count, item.get_title(), item.get_artist(), item.get_link())
+        count += 1
+
+
+def not_valid():
+    print("That is not a valid choice.")
+    print("")
 
 
 class Interface:
@@ -45,7 +62,6 @@ class Main:
             return 'play'
 
         elif action == '2':
-            print("programing needed")
             return 'playlist'
 
         elif action == '3':
@@ -53,8 +69,7 @@ class Main:
             return 'off'
 
         else:
-            print("That is not a valid option.")
-            print("")
+            not_valid()
             return 'main'
 
 
@@ -112,8 +127,7 @@ class Play:
             return 'main'
 
         else:
-            print("that is not a valid choice.")
-            print("")
+            not_valid()
             return 'play'
 
 
@@ -152,8 +166,7 @@ class Queue:
             return 'queue'
 
         else:
-            print("That is not a valid option.")
-            print("")
+            not_valid()
             return 'playlist'
 
 
@@ -174,20 +187,16 @@ class Again:
             return 'off'
 
         else:
-            print("that is not a valid choice")
-            print("")
+            not_valid()
             return 'again'
 
 
 class Playlist:
     @property
     def display(self):
-        print("Current song in playlist:")
-        count = 1
-        for item in starter.queue:
-            print("%d.Title: %s, Artist: %s, Link: %s") % (count, item.get_title(), item.get_artist(), item.get_link())
-            count += 1
-        print("Would you like to 'play the list now?")
+        print("Current song(s) in playlist:")
+        queue_list(starter.queue)
+        print("Would you like to 'play' the list now?")
         print("type in 'play'.")
         print("if you want to add more songs type in 'add'.")
         print("fi you want to remove a song type in 'remove'.")
@@ -198,7 +207,7 @@ class Playlist:
         action.lower()
 
         if action == 'main':
-            starter.queue.clear()  # clears the queue.
+            starter.queue.clear()
             return 'main'
 
         elif action == 'add':
@@ -208,8 +217,7 @@ class Playlist:
             return 'remove'
 
         else:
-            print("That is not a valid option.")
-            print("")
+            not_valid()
             return 'queue'
 
 
@@ -249,8 +257,7 @@ class Add:
             return 'queue'
 
         else:
-            print("That is not a valid option.")
-            print("")
+            not_valid()
             return 'playlist'
 
 
@@ -258,7 +265,12 @@ class Remove:
     @property
     def display(self):
         print("Which song do you want to remove?")
-        queuelist(starter.queue)
+        if len(starter.queue) == 0:
+            print("The playlist is empty returning to main.")
+            print("")
+            return 'main'
+        else:
+            removal_list(starter.queue)
         print("type main to return to the main menu.")
         print("note: returning to the main menu will discard your playlist.")
 
@@ -267,14 +279,66 @@ class Remove:
 
         if action == 'main':
             starter.queue.clear()
+            del queue_builder[:]
             return 'main'
 
         elif action == '1':
-            print("programming needed to work.")
-            return 'remove'
+            if len(queue_builder) < 1:
+                not_valid()
+                del queue_builder[:]
+                return 'remove'
+            else:
+                starter.remove(queue_builder[0])
+                del queue_builder[:]
+                return 'remove'
+
+        elif action == '2':
+            if len(queue_builder) < 2:
+                not_valid()
+                del queue_builder[:]
+                return 'remove'
+
+            else:
+                starter.remove(queue_builder[1])
+                del queue_builder[:]
+                return 'remove'
+
+        elif action == '3':
+            if len(queue_builder) < 3:
+                not_valid()
+                del queue_builder[:]
+                return 'remove'
+
+            else:
+                starter.remove(queue_builder[2])
+                del queue_builder[:]
+                return 'remove'
+
+        elif action == '4':
+            if len(queue_builder) < 3:
+                not_valid()
+                del queue_builder[:]
+                return 'remove'
+
+            else:
+                starter.remove(queue_builder[3])
+                del queue_builder[:]
+                return 'remove'
+
+        elif action == '5':
+            if len(queue_builder) < 4:
+                not_valid()
+                del queue_builder[:]
+                return 'remove'
+
+            else:
+                starter.remove(queue_builder[4])
+                del queue_builder[:]
+                return 'remove'
 
         else:
-            print("That is not a valid choice.")
+            not_valid()
+            del queue_builder[:]
             return 'remove'
 
 
