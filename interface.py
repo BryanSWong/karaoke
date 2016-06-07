@@ -1,7 +1,8 @@
 from sys import exit
 from player import Player
-from songDB import songDB, song
-starter = Player(song)  # a var that sets up the player class for later use.
+from songDB import songDB
+
+starter = Player()  # a var that sets up the player class for later use.
 queue_builder = []
 
 
@@ -89,36 +90,31 @@ class Play:
         action = raw_input("> ")
 
         if action == '1':
-            play_it = Player(songDB[0])
-            play_it.play()
+            starter.play(songDB[0])
             print("")
 
             return 'again'
 
         elif action == '2':
-            play_it = Player(songDB[1])
-            play_it.play()
+            starter.play(songDB[1])
             print("")
 
             return 'again'
 
         elif action == '3':
-            play_it = Player(songDB[2])
-            play_it.play()
+            starter.play(songDB[2])
             print("")
 
             return 'again'
 
         elif action == '4':
-            play_it = Player(songDB[3])
-            play_it.play()
+            starter.play(songDB[3])
             print("")
 
             return 'again'
 
         elif action == '5':
-            play_it = Player(songDB[4])
-            play_it.play()
+            starter.play(songDB[4])
             print("")
 
             return 'again'
@@ -342,6 +338,30 @@ class Remove:
             return 'remove'
 
 
+class QueuePlay:
+
+    def display(self):
+        starter.queue_play()
+        print("")
+        print("If you want to play the songlist again type in 'play'")
+        print("If you want to return to the main menu type in 'main'")
+        print("Note: returning to the main menu will erase your playlist.")
+        action = raw_input("> ")
+        action.lower()
+
+        if action == 'play':
+            return 'play_more'
+
+        elif action == 'main':
+            del queue_builder[:]
+            return 'main'
+
+        else:
+            not_valid()
+            del queue_builder[:]
+            return 'play_more'
+
+
 class Power:
     menu = {
         'main': Main(),
@@ -352,6 +372,7 @@ class Power:
         'playlist': Queue(),
         'add': Add(),
         'remove': Remove(),
+        'play_more': QueuePlay(),
     }
 
     def __init__(self, start_menu):
