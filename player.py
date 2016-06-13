@@ -4,16 +4,16 @@ class Player:
         self.queue = set()
 
     def play(self, song_to_play):
-        print("Now playing: '%s' by %s, official video at %s" %
+        print("Now playing: '{0}' by {1}, official video at {2}".format
               (song_to_play.get_title(), song_to_play.get_artist(), song_to_play.get_link()))
 
     def add(self, song):
         self.queue.add(song)
-        print("Song '%s' added to playlist" % (song.get_title()))
+        print("Song '{0}' added to playlist".format(song.get_title()))
 
     def remove(self, song):
         self.queue.remove(song)
-        print("Song '%s' removed from playlist" % (song.get_title()))
+        print("Song '{0}' removed from playlist".format(song.get_title()))
 
     def queue_play(self):
         for song in self.queue:

@@ -9,14 +9,16 @@ queue_builder = []
 def options(songlist):
     count = 1
     for song in songlist:
-        print("%d.Title: %s, Artist: %s: Link:%s") % (count, song.get_title(), song.get_artist(), song.get_link())
+        print(
+            "{0}.Title: {1}, Artist: {2}, Link:{3}".format(count, song.get_title(), song.get_artist(), song.get_link()))
         count += 1
 
 
 def queue_list(thequeue):
     count = 1
     for item in thequeue:
-        print("%d.Title: %s, Artist: %s: Link:%s") % (count, item.get_title(), item.get_artist(), item.get_link())
+        print(
+            "{0}.Title: {1}, Artist: {2}, Link:{3}".format(count, item.get_title(), item.get_artist(), item.get_link()))
         count += 1
 
 
@@ -27,7 +29,8 @@ def removal_list(queue):
         queue_builder.append(song)
 
     for item in queue_builder:
-        print("%d.Title: %s, Artist: %s: Link:%s") % (count, item.get_title(), item.get_artist(), item.get_link())
+        print(
+            "{0}.Title: {1}, Artist: {2}, Link:{3}".format(count, item.get_title(), item.get_artist(), item.get_link()))
         count += 1
 
 
@@ -57,7 +60,7 @@ class Main:
         print("2. Create and play a playlist.")
         print("3. Power off.")
 
-        action = raw_input("> ")
+        action = input("> ")
 
         if action == '1':
             return 'play'
@@ -82,12 +85,11 @@ class Off:
 class Play:
     @property
     def display(self):
-        count = 1
         print("Which song do you want to play:")
         options(songDB)
         print("type main to go back to main menu")
 
-        action = raw_input("> ")
+        action = input("> ")
 
         if action == '1':
             starter.play(songDB[0])
@@ -135,7 +137,7 @@ class Queue:
         options(songDB)
         print("type main to go back to main menu")
 
-        action = raw_input("> ")
+        action = input("> ")
         action.lower()
 
         if action == 'main':
@@ -172,7 +174,7 @@ class Again:
         print("Play another song? (Y/N)")
         print("note selecting no will power off the system.")
 
-        action = raw_input("> ")
+        action = input("> ")
         action.lower()
 
         if action == 'y':
@@ -199,7 +201,7 @@ class Playlist:
         print("if you want to return to the main menu type in 'main'.")
         print("note if you return to main your playlist will be deleted.")
 
-        action = raw_input("> ")
+        action = input("> ")
         action.lower()
 
         if action == 'main':
@@ -225,7 +227,7 @@ class Add:
         print("type in main to return to main menu, also discards your playlist.")
         print("note: repeated songs will not be played so only add one of each.")
 
-        action = raw_input("> ")
+        action = input("> ")
         action.lower()
 
         if action == 'main':
@@ -270,7 +272,7 @@ class Remove:
         print("type main to return to the main menu.")
         print("note: returning to the main menu will discard your playlist.")
 
-        action = raw_input("> ")
+        action = input("> ")
         action.lower()
 
         if action == 'main':
@@ -346,7 +348,7 @@ class QueuePlay:
         print("If you want to play the songlist again type in 'play'")
         print("If you want to return to the main menu type in 'main'")
         print("Note: returning to the main menu will erase your playlist.")
-        action = raw_input("> ")
+        action = input("> ")
         action.lower()
 
         if action == 'play':
