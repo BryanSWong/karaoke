@@ -55,10 +55,12 @@ class Interface:
 class Main:
     @property
     def display(self):
+        print("")
         print("Welcome to the main menu please select a option:")
         print("1. Play a song.")
         print("2. Create and play a playlist.")
         print("3. Power off.")
+        print("")
 
         action = input("> ")
 
@@ -66,7 +68,7 @@ class Main:
             return 'play'
 
         elif action == '2':
-            return 'playlist'
+            return 'queue'
 
         elif action == '3':
             print("Powering off, have a nice day.")
@@ -78,48 +80,34 @@ class Main:
 
 
 class Off:
+    @property
     def display(self):
-        exit(1)
+        return exit(1)
 
 
 class Play:
     @property
     def display(self):
+        print("")
         print("Which song do you want to play:")
         options(songDB)
+        print("")
         print("type main to go back to main menu")
+        print("")
 
         action = input("> ")
 
-        if action == '1':
-            starter.play(songDB[0])
-            print("")
-
-            return 'again'
-
-        elif action == '2':
-            starter.play(songDB[1])
-            print("")
-
-            return 'again'
-
-        elif action == '3':
-            starter.play(songDB[2])
-            print("")
-
-            return 'again'
-
-        elif action == '4':
-            starter.play(songDB[3])
-            print("")
-
-            return 'again'
-
-        elif action == '5':
-            starter.play(songDB[4])
-            print("")
-
-            return 'again'
+        if action.isdigit():
+            num = int(action)
+            length = len(songDB)
+            if num <= length:
+                num -= 1
+                starter.play(songDB[num])
+                print("")
+                return 'again'
+            else:
+                not_valid()
+                return 'play'
 
         elif action == "main":
             return 'main'
@@ -129,50 +117,13 @@ class Play:
             return 'play'
 
 
-class Queue:
-    @property
-    def display(self):
-        print("The playlist is currently empty.")
-        print("Which song do you want to add to the playlist?")
-        options(songDB)
-        print("type main to go back to main menu")
-
-        action = input("> ")
-        action.lower()
-
-        if action == 'main':
-            return 'main'
-
-        elif action == '1':
-            starter.add(songDB[0])
-            return 'queue'
-
-        elif action == '2':
-            starter.add(songDB[1])
-            return 'queue'
-
-        elif action == '3':
-            starter.add(songDB[2])
-            return 'queue'
-
-        elif action == '4':
-            starter.add(songDB[3])
-            return 'queue'
-
-        elif action == '5':
-            starter.add(songDB[4])
-            return 'queue'
-
-        else:
-            not_valid()
-            return 'playlist'
-
-
 class Again:
     @property
     def display(self):
+        print("")
         print("Play another song? (Y/N)")
-        print("note selecting no will power off the system.")
+        print("note selecting no(N) will power off the system.")
+        print("")
 
         action = input("> ")
         action.lower()
@@ -189,17 +140,53 @@ class Again:
             return 'again'
 
 
+class Queue:
+    @property
+    def display(self):
+        print("")
+        print("The playlist is currently empty.")
+        print("Which song do you want to add to the playlist?")
+        options(songDB)
+        print("")
+        print("type main to go back to main menu")
+        print("")
+
+        action = input("> ")
+        action.lower()
+
+        if action.isdigit():
+            num = int(action)
+            length = len(songDB)
+            if num <= length:
+                num -= 1
+                starter.add(songDB[num])
+                print("")
+                return 'playlist'
+            else:
+                not_valid()
+                return 'queue'
+
+        elif action == 'main':
+            return 'main'
+
+        else:
+            not_valid()
+            return 'queue'
+
+
 class Playlist:
     @property
     def display(self):
+        print("")
         print("Current song(s) in playlist:")
         queue_list(starter.queue)
-        print("Would you like to 'play' the list now?")
-        print("type in 'play'.")
+        print("")
+        print("Would you like to 'play' the list now? type in 'play'.")
         print("if you want to add more songs type in 'add'.")
         print("fi you want to remove a song type in 'remove'.")
         print("if you want to return to the main menu type in 'main'.")
         print("note if you return to main your playlist will be deleted.")
+        print("")
 
         action = input("> ")
         action.lower()
@@ -207,6 +194,9 @@ class Playlist:
         if action == 'main':
             starter.queue.clear()
             return 'main'
+
+        elif action == 'play':
+            return 'play_queue'
 
         elif action == 'add':
             return 'add'
@@ -216,52 +206,49 @@ class Playlist:
 
         else:
             not_valid()
-            return 'queue'
+            return 'playlist'
 
 
 class Add:
     @property
     def display(self):
+        print("")
         print("Which other song do you want to add?")
         options(songDB)
+        print("")
         print("type in main to return to main menu, also discards your playlist.")
-        print("note: repeated songs will not be played so only add one of each.")
+        print("note: repeated songs will not be played or added, only add one of each.")
+        print("")
 
         action = input("> ")
         action.lower()
 
-        if action == 'main':
+        if action.isdigit():
+            num = int(action)
+            length = len(songDB)
+            if num <= length:
+                num -= 1
+                starter.add(songDB[num])
+                print("")
+                return 'playlist'
+            else:
+                not_valid()
+                return 'add'
+
+        elif action == 'main':
             starter.queue.clear()
+            del queue_builder[:]
             return 'main'
-
-        elif action == '1':
-            starter.add(songDB[0])
-            return 'queue'
-
-        elif action == '2':
-            starter.add(songDB[1])
-            return 'queue'
-
-        elif action == '3':
-            starter.add(songDB[2])
-            return 'queue'
-
-        elif action == '4':
-            starter.add(songDB[3])
-            return 'queue'
-
-        elif action == '5':
-            starter.add(songDB[4])
-            return 'queue'
 
         else:
             not_valid()
-            return 'playlist'
+            return 'add'
 
 
 class Remove:
     @property
     def display(self):
+        print("")
         print("Which song do you want to remove?")
         if len(starter.queue) == 0:
             print("The playlist is empty returning to main.")
@@ -269,70 +256,41 @@ class Remove:
             return 'main'
         else:
             removal_list(starter.queue)
-        print("type main to return to the main menu.")
+        print("")
+        print("Type 'play' to play the current playlist.")
+        print("Type 'add' to add songs to the playlist.")
+        print("Type 'main' to return to the main menu.")
         print("note: returning to the main menu will discard your playlist.")
+        print("")
 
         action = input("> ")
         action.lower()
 
-        if action == 'main':
+        if action.isdigit():
+            num = int(action)
+            length = len(starter.queue)
+            if num <= length:
+                num -= 1
+                starter.remove(queue_builder[num])
+                del queue_builder[:]
+                return 'remove'
+            else:
+                not_valid()
+                del queue_builder[:]
+                return 'remove'
+
+        elif action == 'main':
             starter.queue.clear()
             del queue_builder[:]
             return 'main'
 
-        elif action == '1':
-            if len(queue_builder) < 1:
-                not_valid()
-                del queue_builder[:]
-                return 'remove'
-            else:
-                starter.remove(queue_builder[0])
-                del queue_builder[:]
-                return 'remove'
+        elif action == 'play':
+            del queue_builder[:]
+            return 'play_queue'
 
-        elif action == '2':
-            if len(queue_builder) < 2:
-                not_valid()
-                del queue_builder[:]
-                return 'remove'
-
-            else:
-                starter.remove(queue_builder[1])
-                del queue_builder[:]
-                return 'remove'
-
-        elif action == '3':
-            if len(queue_builder) < 3:
-                not_valid()
-                del queue_builder[:]
-                return 'remove'
-
-            else:
-                starter.remove(queue_builder[2])
-                del queue_builder[:]
-                return 'remove'
-
-        elif action == '4':
-            if len(queue_builder) < 3:
-                not_valid()
-                del queue_builder[:]
-                return 'remove'
-
-            else:
-                starter.remove(queue_builder[3])
-                del queue_builder[:]
-                return 'remove'
-
-        elif action == '5':
-            if len(queue_builder) < 4:
-                not_valid()
-                del queue_builder[:]
-                return 'remove'
-
-            else:
-                starter.remove(queue_builder[4])
-                del queue_builder[:]
-                return 'remove'
+        elif action == 'add':
+            del queue_builder[:]
+            return 'add'
 
         else:
             not_valid()
@@ -341,9 +299,35 @@ class Remove:
 
 
 class QueuePlay:
-
+    @property
     def display(self):
         starter.queue_play()
+        print("")
+        print("If you want to play the songlist again type in 'play'")
+        print("If you want to return to the main menu type in 'main'")
+        print("Note: returning to the main menu will erase your playlist.")
+        print("")
+
+        action = input("> ")
+        action.lower()
+
+        if action == 'play':
+            return 'play_queue'
+
+        elif action == 'main':
+            del queue_builder[:]
+            starter.queue.clear()
+            return 'main'
+
+        else:
+            not_valid()
+            del queue_builder[:]
+            return 'play_queue_options'
+
+
+class QueuePlayOptions:
+    @property
+    def display(self):
         print("")
         print("If you want to play the songlist again type in 'play'")
         print("If you want to return to the main menu type in 'main'")
@@ -352,16 +336,17 @@ class QueuePlay:
         action.lower()
 
         if action == 'play':
-            return 'play_more'
+            return 'play_queue'
 
         elif action == 'main':
             del queue_builder[:]
+            starter.queue.clear()
             return 'main'
 
         else:
             not_valid()
             del queue_builder[:]
-            return 'play_more'
+            return 'play_queue_options'
 
 
 class Power:
@@ -369,12 +354,13 @@ class Power:
         'main': Main(),
         'off': Off(),
         'play': Play(),
-        'queue': Playlist(),
         'again': Again(),
-        'playlist': Queue(),
+        'queue': Queue(),
+        'playlist': Playlist(),
         'add': Add(),
         'remove': Remove(),
-        'play_more': QueuePlay(),
+        'play_queue': QueuePlay(),
+        'play_queue_options': QueuePlayOptions(),
     }
 
     def __init__(self, start_menu):
