@@ -2,59 +2,39 @@ from sys import exit
 from player import Player
 from songDB import songDB
 
-starter = Player()  # a var that sets up the player class for later use.
-queue_builder = []
-
-
-def options(songlist):
-    count = 1
-    for song in songlist:
-        print(
-            "{0}.Title: {1}, Artist: {2}, Link:{3}".format(count, song.get_title(), song.get_artist(), song.get_link()))
-        count += 1
-
-
-def queue_list(thequeue):
-    count = 1
-    for item in thequeue:
-        print(
-            "{0}.Title: {1}, Artist: {2}, Link:{3}".format(count, item.get_title(), item.get_artist(), item.get_link()))
-        count += 1
-
-
-def removal_list(queue):
-    count = 1
-
-    for song in queue:
-        queue_builder.append(song)
-
-    for item in queue_builder:
-        print(
-            "{0}.Title: {1}, Artist: {2}, Link:{3}".format(count, item.get_title(), item.get_artist(), item.get_link()))
-        count += 1
-
-
-def not_valid():
-    print("That is not a valid choice.")
-    print("")
-
-
 class Interface:
-    def __init__(self, the_menu):
-        self.the_menu = the_menu
 
-    def start(self):
-        current_menu = self.the_menu.opening_menu()
-        last_menu = self.the_menu.next_menu('off')
+    def __init__(self):
+        self.starter = Player()  # a var that sets up the player class for later use.
+        self.queue_builder = []
 
-        while current_menu != last_menu:
-            next_menu_choice = current_menu.display
-            current_menu = self.the_menu.next_menu(next_menu_choice)
+    @staticmethod
+    def options(songlist):
+        count = 1
+        for song in songlist:
+            print(
+                "{0}.Title: {1}, Artist: {2}, Link:{3}".format(count, song.get_title(), song.get_artist(),
+                                                               song.get_link()))
+            count += 1
 
+    def removal_list(self, queue):
+        count = 1
 
-class Main:
-    @property
-    def display(self):
+        for song in queue:
+            self.queue_builder.append(song)
+
+        for item in self.queue_builder:
+            print(
+                "{0}.Title: {1}, Artist: {2}, Link:{3}".format(count, item.get_title(), item.get_artist(),
+                                                               item.get_link()))
+            count += 1
+
+    @staticmethod
+    def not_valid():
+        print("That is not a valid choice.")
+        print("")
+
+    def main(self):
         print("")
         print("Welcome to the main menu please select a option:")
         print("1. Play a song.")
@@ -65,32 +45,27 @@ class Main:
         action = input("> ")
 
         if action == '1':
-            return 'play'
+            return self.play()
 
         elif action == '2':
-            return 'queue'
+            return self.queue()
 
         elif action == '3':
             print("Powering off, have a nice day.")
-            return 'off'
+            return self.off()
 
         else:
-            not_valid()
-            return 'main'
+            self.not_valid()
+            return self.main()
 
-
-class Off:
-    @property
-    def display(self):
+    @staticmethod
+    def off():
         return exit(1)
 
-
-class Play:
-    @property
-    def display(self):
+    def play(self):
         print("")
         print("Which song do you want to play:")
-        options(songDB)
+        self.options(songDB)
         print("")
         print("type main to go back to main menu")
         print("")
@@ -102,51 +77,49 @@ class Play:
             length = len(songDB)
             if num <= length:
                 num -= 1
-                starter.play(songDB[num])
+                self.starter.play(songDB[num])
                 print("")
-                return 'again'
+                return self.again()
             else:
-                not_valid()
-                return 'play'
+                self.not_valid()
+                return self.play()
 
         elif action == "main":
-            return 'main'
+            return self.main()
 
         else:
-            not_valid()
-            return 'play'
+            self.not_valid()
+            return self.play()
 
-
-class Again:
-    @property
-    def display(self):
+    def again(self):
         print("")
         print("Play another song? (Y/N)")
-        print("note selecting no(N) will power off the system.")
+        print("Note: selecting no(N) will power off the system.")
+        print("Typing in 'main' will bring you back to the main menu")
         print("")
 
         action = input("> ")
         action.lower()
 
         if action == 'y':
-            return 'play'
+            return self.play()
 
         elif action == 'n':
             print("Powering off, have a nice day.")
-            return 'off'
+            return self.off()
+
+        elif action == 'main':
+            return self.main()
 
         else:
-            not_valid()
-            return 'again'
+            self.not_valid()
+            return self.again()
 
-
-class Queue:
-    @property
-    def display(self):
+    def queue(self):
         print("")
         print("The playlist is currently empty.")
         print("Which song do you want to add to the playlist?")
-        options(songDB)
+        self.options(songDB)
         print("")
         print("type main to go back to main menu")
         print("")
@@ -159,27 +132,24 @@ class Queue:
             length = len(songDB)
             if num <= length:
                 num -= 1
-                starter.add(songDB[num])
+                self.starter.add(songDB[num])
                 print("")
-                return 'playlist'
+                return self.playlist()
             else:
-                not_valid()
+                self.not_valid()
                 return 'queue'
 
         elif action == 'main':
-            return 'main'
+            return self.main()
 
         else:
-            not_valid()
-            return 'queue'
+            self.not_valid()
+            return self.queue()
 
-
-class Playlist:
-    @property
-    def display(self):
+    def playlist(self):
         print("")
         print("Current song(s) in playlist:")
-        queue_list(starter.queue)
+        self.options(self.starter.queue)
         print("")
         print("Would you like to 'play' the list now? type in 'play'.")
         print("if you want to add more songs type in 'add'.")
@@ -192,29 +162,26 @@ class Playlist:
         action.lower()
 
         if action == 'main':
-            starter.queue.clear()
-            return 'main'
+            self.starter.queue.clear()
+            return self.main()
 
         elif action == 'play':
-            return 'play_queue'
+            return self.queue_play()
 
         elif action == 'add':
-            return 'add'
+            return self.add()
 
         elif action == 'remove':
-            return 'remove'
+            return self.remove()
 
         else:
-            not_valid()
-            return 'playlist'
+            self.not_valid()
+            return self.playlist()
 
-
-class Add:
-    @property
-    def display(self):
+    def add(self):
         print("")
         print("Which other song do you want to add?")
-        options(songDB)
+        self.options(songDB)
         print("")
         print("type in main to return to main menu, also discards your playlist.")
         print("note: repeated songs will not be played or added, only add one of each.")
@@ -228,34 +195,31 @@ class Add:
             length = len(songDB)
             if num <= length:
                 num -= 1
-                starter.add(songDB[num])
+                self.starter.add(songDB[num])
                 print("")
-                return 'playlist'
+                return self.playlist()
             else:
-                not_valid()
-                return 'add'
+                self.not_valid()
+                return self.add()
 
         elif action == 'main':
-            starter.queue.clear()
-            del queue_builder[:]
-            return 'main'
+            self.starter.queue.clear()
+            del self.queue_builder[:]
+            return self.main()
 
         else:
-            not_valid()
-            return 'add'
+            self.not_valid()
+            return self.add()
 
-
-class Remove:
-    @property
-    def display(self):
+    def remove(self):
         print("")
         print("Which song do you want to remove?")
-        if len(starter.queue) == 0:
+        if len(self.starter.queue) == 0:
             print("The playlist is empty returning to main.")
             print("")
-            return 'main'
+            return self.main()
         else:
-            removal_list(starter.queue)
+            self.removal_list(self.starter.queue)
         print("")
         print("Type 'play' to play the current playlist.")
         print("Type 'add' to add songs to the playlist.")
@@ -268,40 +232,37 @@ class Remove:
 
         if action.isdigit():
             num = int(action)
-            length = len(starter.queue)
+            length = len(self.starter.queue)
             if num <= length:
                 num -= 1
-                starter.remove(queue_builder[num])
-                del queue_builder[:]
-                return 'remove'
+                self.starter.remove(self.queue_builder[num])
+                del self.queue_builder[:]
+                return self.remove()
             else:
-                not_valid()
-                del queue_builder[:]
-                return 'remove'
+                self.not_valid()
+                del self.queue_builder[:]
+                return self.remove()
 
         elif action == 'main':
-            starter.queue.clear()
-            del queue_builder[:]
-            return 'main'
+            self.starter.queue.clear()
+            del self.queue_builder[:]
+            return self.main()
 
         elif action == 'play':
-            del queue_builder[:]
-            return 'play_queue'
+            del self.queue_builder[:]
+            return self.queue_play()
 
         elif action == 'add':
-            del queue_builder[:]
-            return 'add'
+            del self.queue_builder[:]
+            return self.add()
 
         else:
-            not_valid()
-            del queue_builder[:]
-            return 'remove'
+            self.not_valid()
+            del self.queue_builder[:]
+            return self.remove()
 
-
-class QueuePlay:
-    @property
-    def display(self):
-        starter.queue_play()
+    def queue_play(self):
+        self.starter.queue_play()
         print("")
         print("If you want to play the songlist again type in 'play'")
         print("If you want to return to the main menu type in 'main'")
@@ -312,22 +273,19 @@ class QueuePlay:
         action.lower()
 
         if action == 'play':
-            return 'play_queue'
+            return self.queue_play()
 
         elif action == 'main':
-            del queue_builder[:]
-            starter.queue.clear()
-            return 'main'
+            del self.queue_builder[:]
+            self.starter.queue.clear()
+            return self.main()
 
         else:
-            not_valid()
-            del queue_builder[:]
-            return 'play_queue_options'
+            self.not_valid()
+            del self.queue_builder[:]
+            return self.queue_play_options()
 
-
-class QueuePlayOptions:
-    @property
-    def display(self):
+    def queue_play_options(self):
         print("")
         print("If you want to play the songlist again type in 'play'")
         print("If you want to return to the main menu type in 'main'")
@@ -336,39 +294,14 @@ class QueuePlayOptions:
         action.lower()
 
         if action == 'play':
-            return 'play_queue'
+            return self.queue_play()
 
         elif action == 'main':
-            del queue_builder[:]
-            starter.queue.clear()
-            return 'main'
+            del self.queue_builder[:]
+            self.starter.queue.clear()
+            return self.main()
 
         else:
-            not_valid()
-            del queue_builder[:]
-            return 'play_queue_options'
-
-
-class Power:
-    menu = {
-        'main': Main(),
-        'off': Off(),
-        'play': Play(),
-        'again': Again(),
-        'queue': Queue(),
-        'playlist': Playlist(),
-        'add': Add(),
-        'remove': Remove(),
-        'play_queue': QueuePlay(),
-        'play_queue_options': QueuePlayOptions(),
-    }
-
-    def __init__(self, start_menu):
-        self.start_menu = start_menu
-
-    def next_menu(self, menu_name):
-        val = Power.menu.get(menu_name)
-        return val
-
-    def opening_menu(self):
-        return self.next_menu(self.start_menu)
+            self.not_valid()
+            del self.queue_builder[:]
+            return self.queue_play_options()

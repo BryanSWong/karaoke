@@ -1,5 +1,5 @@
-from interface import Power, Interface
+from interface import Interface
 
-power_on = Power('main')
-start = Interface(power_on)
-start.start()
+start = Interface()
+
+start.main()
