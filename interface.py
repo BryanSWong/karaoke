@@ -2,6 +2,7 @@ from sys import exit
 from player import Player
 from songDB import songDB
 
+
 class Interface:
 
     def __init__(self):
